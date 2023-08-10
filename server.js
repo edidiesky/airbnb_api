@@ -1,6 +1,8 @@
 import express from "express";
 import path from "path";
 import dotenv from "dotenv";
+import swaggerJsdoc from "swagger-jsdoc";
+import swaggerUi from 'swagger-ui-express'
 
 dotenv.config();
 
@@ -13,6 +15,31 @@ import mongoose from "mongoose";
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+
+const options = {
+  definition: {
+    openapi: '3.0.0',
+    info:{
+      title:"Airbnb api",
+      version:"0.1.0",
+      description:"This api is a product of my clone of the airbnb rental platform full-stack project"
+    },
+    servers:[
+      {
+        url:'http://localhost:3000/'
+      }
+    ],
+    info: {
+      title: 'Hello World',
+      version: '1.0.0',
+    },
+  },
+  apis: ['./src/routes*.js'], // files containing annotations as above
+};
+
+const openapiSpecification = swaggerJsdoc(options);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpecification))
 // routes
 
 import authRoute from "./routes/authRoute.js";

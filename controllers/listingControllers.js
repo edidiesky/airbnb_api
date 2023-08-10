@@ -73,19 +73,19 @@ const GetAllListing = asyncHandler(async (req, res) => {
 //
 // GET SINGLE Listing
 // Not Private
-const GetSingleListing = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-  // find the Listing
-  const gig = await Listing.findById({ _id: id }).populate(
-    "listing_host_Id",
-    "username image country role"
-  );
-  if (!gig) {
-    res.status(404);
-    throw new Error("Listing not found");
-  }
-  res.status(200).json({ gig });
-});
+  const GetSingleListing = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    // find the Listing
+    const gig = await Listing.findById({ _id: id }).populate(
+      "listing_host_Id",
+      "username image country role"
+    );
+    if (!gig) {
+      res.status(404);
+      throw new Error("Listing not found");
+    }
+    res.status(200).json({ gig });
+  });
 
 // GET User Listing
 // Not Private
