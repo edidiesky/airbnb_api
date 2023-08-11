@@ -1,10 +1,243 @@
-#### In achieving this api, this steps were taken
-- Create a folder for controllers ( Are functions that handles request and response call for the user)
-- create a folder that handles the Middlewares
-- Create a folder for different data we are to feed to the database
-- Create models for the api( Such as user model, Reservation model, Listing model and many more)
-- Craete the folder for the different routers using 
-- Create the root file which will handle the routing 
+
+# Building the Ultimate Airbnb Experience: A Node.js and Express.js API
+
+Welcome to the official documentation of my Airbnb api. This API was created by me for interacting with a clone of my react nextjs full stack clone of Airbnb
+
+## API Documentation
+
+Explore the comprehensive API documentation to understand how to use each endpoint, request and response formats, and authentication methods. Please refer to the [API Documentation](https://app.swaggerhub.com/apis-docs/ESSIENEDIDIONG1000_1/airbnb-api/1.0.0#/) for more details.
+
+
+## Features
+
+- **Accommodation Listings:**
+  Provide users with a comprehensive list of available accommodations. Users can narrow down results based on location, dates, price range, and amenities.
+- **Accommodation Details:**
+  Fetch detailed information about a specific accommodation, including its description, photos, amenities, and reviews.
+- **User Authentication:**
+  Implement a secure authentication system, allowing users to register, log in, and access protected endpoints. Generate authentication tokens for secure communication.
+- **User Bookings:**
+  User can add or create Reservations on the accommodation they are interested in
+- **Search and Filters:** 
+  I created functions which receives queries which allow user to filtering based on different parameters such as price, location, title, types and may more
+- **Booking Reservations:**
+  Reservations models and controllers were made accessible in this api. Controllers to see, delete Reservations were being created
+
+- **Reviews and Ratings:**
+  Routes were created user can leave a review
+- Host Management
+- Real-time Notifications
+- Favorites and Wishlists
+- Payment Integration (using stripe)
+- Reporting and Analytics
+- Admin Dashboard
+
+
+
+
+## API Reference
+
+### Register a new user.
+
+```http
+  POST api/v1/auth/register
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `firstname` | `string` | **Required**.User's first name |
+| `lastname` | `string` | **Required**. User's last name |
+| `email` | `string` | **Required**. User's email address |
+| `password` | `string` | **Required**. User's password |
+
+**Response:**
+ - Status: 200 OK
+ - Body:
+    ```json
+    {
+      "user": {
+        "_id": "user_id",
+        "firstname": "John",
+        "lastname": "Doe",
+        "phone": "1234567890",
+        "email": "john@example.com",
+        "isAdmin": false,
+        "country": "United States",
+        "state": "California",
+        "postalCode": "12345"
+      }
+    }
+    ```
+
+### Example Request
+
+```http
+POST /api/auth/register
+Content-Type: application/json
+
+{
+  "firstname": "John",
+  "lastname": "Doe",
+  "email": "john@example.com",
+  "password": "securepassword",
+  "phone": "1234567890",
+  "country": "United States"
+}
+
+```
+
+Register a new user with the provided details and generate an authentication token.
+
+### Login a user.
+
+```http
+  POST api/v1/auth/login
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `email` | `string` | **Required**. User's email address |
+| `password` | `string` | **Required**. User's password |
+
+**Response:**
+ - Status: 200 OK
+ - Body:
+    ```json
+    {
+      "user": {
+        "_id": "user_id",
+        "firstname": "John",
+        "lastname": "Doe",
+        "phone": "1234567890",
+        "email": "john@example.com",
+        "isAdmin": false,
+        "country": "United States",
+        "state": "California",
+        "postalCode": "12345"
+      }
+    }
+    ```
+
+Login a new user with the provided details and generate an authentication token.
+
+### Example Request
+
+```http
+POST /api/auth/login
+Content-Type: application/json
+
+{
+  "firstname": "John",
+  "lastname": "Doe",
+  "email": "john@example.com",
+  "password": "securepassword",
+  "phone": "1234567890",
+  "country": "United States"
+}
+
+```
+
+
+## Get All Listings Endpoint
+
+Retrieve a list of listings ( listings) based on specified filters and sorting options.
+
+
+```http
+  GET api/v1/listings
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `search` | `string` |  Search by listing  title |
+| `sort` | `string` | Sort by "latest", "oldest", "price", or "rating". |
+| `colors` | `string` |  Filter based on the color listing  |
+| `category` | `string` |  Filter based on the category listing  |
+| `tag` | `string` | Filter by listing tag|
+| `minprice` | `number` | Filter based on the minimum price|
+| `tag` | `number` | Filter based on the maximum price|
+| `limit` | `number` | Filter by  tag|
+| `page` | `number` | Page number (default: 1)|
+
+
+**Response:**
+  - Status: 200 OK
+  - Body:
+
+    ```json
+    {
+      "listing": [
+        {
+          "_id": "product_id",
+          "title": "Product Title",
+          "price": 99.99,
+          "colors": ["Red", "Blue"],
+          "category": "Electronics",
+          "tag": "Featured",
+          "createdAt": "2023-08-11T10:00:00.000Z",
+          "rating": 4.5
+          // ... other listing properties
+        },
+        // ... more listings
+      ],
+      "noOfPages": 5,
+      "totalProduct": 73
+    }
+
+ ```
+
+
+### Example Request
+
+```http
+GET /api/v1/listing?search=Telsa&sort=latest&colors=Red&category=Electric Cars&limit=10&page=1
+```
+
+
+## Create Single Car Product Endpoint
+
+```http
+  POST api/v1/listings
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `title` | `string` |  listing  title |
+| `price` | `string` |  listing  price |
+
+
+- **Headers:**
+  - `Authorization` (string): Bearer token for authentication.
+- **Response:**
+
+  - Status: 200 OK
+  - Body:
+    ```json
+    {
+      "listing": {
+        "_id": "product_id",
+        "title": "New Product Title",
+        "price": 129.99,
+        // ... other listing properties ...
+        "user": "user_id",
+        "createdAt": "2023-08-11T12:00:00.000Z"
+      }
+    }
+    ```
+### Example Request
+
+```http
+POST /api/v1/listing
+Authorization: Bearer your_jwt_token
+Content-Type: application/json
+
+{
+  "title": "New Product Title",
+  "price": 129.99,
+  // ... other listing properties ...
+}
+
+```
 
 
 
